@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.88.0
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --all --check
+      - run: cargo clippy --locked --workspace --all-targets -- -D warnings
+      - run: cargo test --locked --workspace --all-targets
+
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - run: npm test -- --run
+
+  compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose config --quiet
+      - name: Build and start the complete devnet
+        run: docker compose up --build --detach --wait --wait-timeout 300
+      - name: Finalize a real wallet flow
+        run: docker compose exec -T observer kcoin benchmark --samples 2 --timeout-seconds 30 --output /tmp/ci-benchmark-smoke.json
+      - name: Prove three-of-four progress and validator recovery
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker compose stop validator-4
+          before="$(curl --fail --silent http://127.0.0.1:4100/api/v1/status | jq -r '.height')"
+          docker compose exec -T observer kcoin benchmark --samples 1 --timeout-seconds 30
+          after="$(curl --fail --silent http://127.0.0.1:4100/api/v1/status | jq -r '.height')"
+          test "$after" -gt "$before"
+          docker compose start validator-4
+          timeout 180 bash -c 'until curl --fail --silent http://127.0.0.1:4113/health/ready >/dev/null; do sleep 2; done'
+          converged=false
+          for _ in $(seq 1 60); do
+            observer="$(curl --fail --silent http://127.0.0.1:4100/api/v1/status)"
+            recovered="$(curl --fail --silent http://127.0.0.1:4113/api/v1/status)"
+            observer_tip="$(jq -r '[.height, .finalized_hash, .state_root] | join(":")' <<<"$observer")"
+            recovered_tip="$(jq -r '[.height, .finalized_hash, .state_root] | join(":")' <<<"$recovered")"
+            if [[ "$observer_tip" == "$recovered_tip" ]]; then
+              converged=true
+              break
+            fi
+            sleep 2
+          done
+          test "$converged" = true
+      - name: Show service logs on failure
+        if: failure()
+        run: docker compose logs --no-color
+      - name: Stop the devnet
+        if: always()
+        run: docker compose down --volumes

@@ -1,0 +1,16 @@
+.git
+.github
+.kcoin
+target
+web/node_modules
+web/dist
+.env
+.env.*
+output
+.playwright-cli
+benchmark-results/local
+**/*.db
+**/*.db-shm
+**/*.db-wal
+**/*.log
+.DS_Store

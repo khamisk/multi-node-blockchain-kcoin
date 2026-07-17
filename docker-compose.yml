@@ -1,0 +1,158 @@
+name: kcoin
+
+x-node-service: &node-service
+  image: kcoin-node:local
+  environment:
+    KCOIN_CHAIN_ID: kcoin-local-1
+    RUST_LOG: kcoin_node=info,tower_http=info
+  healthcheck:
+    test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:4100/health/ready"]
+    interval: 3s
+    timeout: 2s
+    start_period: 5s
+    retries: 30
+  restart: unless-stopped
+  stop_grace_period: 10s
+
+services:
+  # Validators start together and redial static peers until they connect.
+  # Public service names are 1-based to match the explorer; the
+  # --validator-index argument remains the zero-based genesis slot.
+  validator-1:
+    <<: *node-service
+    # Build the shared node image once. The remaining node services reuse it,
+    # avoiding parallel image-export races on Docker Desktop.
+    build:
+      context: .
+      target: node
+    command:
+      - --role
+      - validator
+      - --validator-index
+      - "0"
+      - --api-addr
+      - 0.0.0.0:4100
+      - --p2p-port
+      - "5100"
+      - --db-path
+      - /data/node.db
+      - --heartbeat-ms
+      - "5000"
+    ports:
+      - "4110:4100"
+    volumes:
+      - validator-1-data:/data
+
+  validator-2:
+    <<: *node-service
+    command:
+      - --role
+      - validator
+      - --validator-index
+      - "1"
+      - --api-addr
+      - 0.0.0.0:4100
+      - --p2p-port
+      - "5100"
+      - --db-path
+      - /data/node.db
+      - --peers
+      - /dns4/validator-1/udp/5100/quic-v1
+      - --heartbeat-ms
+      - "5000"
+    ports:
+      - "4111:4100"
+    volumes:
+      - validator-2-data:/data
+
+  validator-3:
+    <<: *node-service
+    command:
+      - --role
+      - validator
+      - --validator-index
+      - "2"
+      - --api-addr
+      - 0.0.0.0:4100
+      - --p2p-port
+      - "5100"
+      - --db-path
+      - /data/node.db
+      - --peers
+      - /dns4/validator-1/udp/5100/quic-v1,/dns4/validator-2/udp/5100/quic-v1
+      - --heartbeat-ms
+      - "5000"
+    ports:
+      - "4112:4100"
+    volumes:
+      - validator-3-data:/data
+
+  validator-4:
+    <<: *node-service
+    command:
+      - --role
+      - validator
+      - --validator-index
+      - "3"
+      - --api-addr
+      - 0.0.0.0:4100
+      - --p2p-port
+      - "5100"
+      - --db-path
+      - /data/node.db
+      - --peers
+      - /dns4/validator-1/udp/5100/quic-v1,/dns4/validator-2/udp/5100/quic-v1,/dns4/validator-3/udp/5100/quic-v1
+      - --heartbeat-ms
+      - "5000"
+    ports:
+      - "4113:4100"
+    volumes:
+      - validator-4-data:/data
+
+  observer:
+    <<: *node-service
+    command:
+      - --role
+      - observer
+      - --api-addr
+      - 0.0.0.0:4100
+      - --p2p-port
+      - "5100"
+      - --db-path
+      - /data/node.db
+      - --peers
+      - /dns4/validator-1/udp/5100/quic-v1,/dns4/validator-2/udp/5100/quic-v1,/dns4/validator-3/udp/5100/quic-v1,/dns4/validator-4/udp/5100/quic-v1
+      - --heartbeat-ms
+      - "5000"
+    depends_on:
+      validator-1:
+        condition: service_healthy
+      validator-2:
+        condition: service_healthy
+      validator-3:
+        condition: service_healthy
+      validator-4:
+        condition: service_healthy
+    ports:
+      - "4100:4100"
+    volumes:
+      - observer-data:/data
+
+  web:
+    image: kcoin-web:local
+    build:
+      context: .
+      target: web
+    depends_on:
+      observer:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+volumes:
+  validator-1-data:
+  validator-2-data:
+  validator-3-data:
+  validator-4-data:
+  observer-data:

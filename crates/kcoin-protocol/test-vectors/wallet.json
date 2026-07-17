@@ -1,0 +1,30 @@
+{
+  "description": "Cross-language KCoin v1 wallet vectors. All u64 JSON values are decimal strings.",
+  "protocolVersion": 1,
+  "chainId": "kcoin-local",
+  "senderPrivateKeyPkcs8Hex": "302e020100300506032b6570042204200707070707070707070707070707070707070707070707070707070707070707",
+  "senderPublicKeyHex": "ea4a6c63e29c520abef5507b132ec5f9954776aebebe7b92421eea691446d22c",
+  "senderAddress": "kcoin1k7kkmlf8ljc67nnpg55n7h298ze8sepptjyscr",
+  "recipientAddress": "kcoin1dzhfuwwte062wyyudfmjtw2kwcl58dhal34n8a",
+  "transfer": {
+    "nonce": "7",
+    "expiryHeight": "42",
+    "amountAtoms": "12345678",
+    "signingBytesHex": "4b434f494e5f54585f56310001000b0000006b636f696e2d6c6f63616cea4a6c63e29c520abef5507b132ec5f9954776aebebe7b92421eea691446d22c07000000000000002a000000000000000068ae9e39cbcbf4a7109c6a7725b956763f43b6fd4e61bc0000000000",
+    "signatureHex": "dd0d99794938b981310c1846a0c721cf6f89f65c22d00a3a2be944970540c77a02875c1120a24bad9a8afb9d347b4fc3d7d8913090340d4050e0efd1eb49a00b",
+    "transactionId": "457e03358299b7f27541fe6a08d3b08055ea4149cfd7b16f03fe5ed617678bbd"
+  },
+  "setDisplayName": {
+    "nonce": "8",
+    "expiryHeight": "42",
+    "displayName": "Ada",
+    "signingBytesHex": "4b434f494e5f54585f56310001000b0000006b636f696e2d6c6f63616cea4a6c63e29c520abef5507b132ec5f9954776aebebe7b92421eea691446d22c08000000000000002a00000000000000020103000000416461"
+  },
+  "claimReward": {
+    "nonce": "9",
+    "expiryHeight": "42",
+    "challengeId": "3",
+    "answer": 12,
+    "signingBytesHex": "4b434f494e5f54585f56310001000b0000006b636f696e2d6c6f63616cea4a6c63e29c520abef5507b132ec5f9954776aebebe7b92421eea691446d22c09000000000000002a000000000000000103000000000000000c00"
+  }
+}

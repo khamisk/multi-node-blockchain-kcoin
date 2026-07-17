@@ -1,0 +1,21 @@
+[package]
+name = "kcoin-consensus"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Pure Tendermint-inspired consensus state machine for KCoin"
+
+[features]
+default = []
+simulation = []
+
+[dependencies]
+borsh.workspace = true
+ed25519-dalek.workspace = true
+kcoin-protocol = { path = "../kcoin-protocol" }
+serde.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true

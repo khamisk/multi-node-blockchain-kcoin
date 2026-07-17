@@ -1,0 +1,27 @@
+[package]
+name = "kcoin-protocol"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Deterministic protocol, ledger, and cryptographic types for KCoin"
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[features]
+default = []
+wasm = ["dep:wasm-bindgen"]
+
+[dependencies]
+bech32.workspace = true
+blake3.workspace = true
+borsh.workspace = true
+ed25519-dalek.workspace = true
+hex.workspace = true
+thiserror.workspace = true
+wasm-bindgen = { workspace = true, optional = true }
+
+[dev-dependencies]
+proptest = "1.7"
+rand.workspace = true
