@@ -4,16 +4,18 @@ A four-validator blockchain and live explorer built in Rust and React, with brow
 
 **Stack:** Rust, React, Axum, rust-libp2p/QUIC, SQLite, WebCrypto, Docker Compose
 
+## TL;DR
+
+KCoin is a working blockchain network that starts locally with one command.
+
+- **Wallet:** The browser creates a private key and a matching public key. The private key signs transactions and never goes to a node. The public key is turned into the wallet address used to receive KCoin.
+- **Earn:** Answer the current math challenge. A valid claim creates KCoin and adds it to the wallet balance.
+- **Send:** Enter another wallet address and an amount. The wallet signs the transfer and sends it to the network.
+- **Confirm:** Four independent validators check the transfer. When 3 of 4 accept the same block, it is final.
+- **Explore:** The explorer shows wallets, transactions, blocks, balances, ownership, and validator activity.
+- **Recover:** If one validator goes offline, the other three continue. When it returns, it downloads and verifies every block it missed before rejoining.
+
 ![Create a wallet, earn and send KCoin, inspect finality, then recover an offline validator](docs/assets/kcoin-demo-highlight.gif)
-
-The demo shows:
-
-1. Create a browser wallet and save its backup.
-2. Solve an arithmetic challenge to earn KCoin.
-3. Send KCoin to another address.
-4. Open the finalized transaction, block, and commit certificate.
-5. Stop Validator 4 while the other three continue finalizing.
-6. Restart it and watch it move from **Offline** to **Syncing** to **Up to date**.
 
 [Download the full 1:53 recording](https://github.com/khamisk/multi-node-blockchain-kcoin/releases/download/v0.1.0/kcoin-demo.webm). It uses four validator containers, one observer, and five separate SQLite databases. The wallet and chain data are real.
 
