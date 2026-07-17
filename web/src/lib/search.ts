@@ -29,5 +29,5 @@ export function resolveSearchQuery(query: string): SearchResolution {
   if (/^\d+$/.test(value)) return { kind: 'route', route: `/blocks/${value}` }
   if (HASH.test(value)) return { kind: 'ambiguous-hash', hash: value.toLowerCase() }
 
-  return { kind: 'invalid', message: 'Use a height, kcoin1 address, or 64-character hash. Prefix hashes with “block:” or “tx:” to go directly.' }
+  return { kind: 'invalid', message: 'Use a height, kcoin1 address, or 64-character hash. Prefix a hash with block: or tx: to go directly.' }
 }

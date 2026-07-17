@@ -2,13 +2,9 @@
 
 ## Media status
 
-The README opens with a silent [18-second preview](assets/kcoin-demo-highlight.gif) assembled from eight real-network screenshots. It links to the [full 1:53 browser recording](assets/kcoin-demo.webm). All media uses four validator containers, one observer container, independent SQLite databases, and live REST/SSE data with browser demo mode disabled. The recording starts with wallet creation; Docker outage commands run out of frame while the visible validator sequence remains continuous and at normal speed.
+The README includes an [18-second GIF](assets/kcoin-demo-highlight.gif) built from eight screenshots. The [full 1:53 recording](https://github.com/khamisk/multi-node-blockchain-kcoin/releases/download/v0.1.0/kcoin-demo.webm) is available as a release download. Both were captured from the Docker network with demo mode off.
 
-The checked-in GIF is reproducible from those frames with `scripts/build-demo-highlight.ps1` (Python and Pillow are required). It gives each step 2.2 seconds, emits a 960-pixel-wide optimized animation, and includes no audio.
-
-The instructions below remain the reproducible shot list and the acceptance checks for replacing the full recording later; the short README highlight is intentionally a labelled frame sequence, not a claim of real-time recovery speed.
-
-Keep future captures silent, tightly cropped, and readable at GitHub width. Record against the real Docker network with browser demo mode disabled, keep the validator rail visible whenever possible, and avoid edits that hide waiting time; modest speed-up is acceptable only if labelled in the clip.
+Rebuild the GIF with `scripts/build-demo-highlight.ps1`. It requires Python and Pillow. The GIF uses still frames; the WebM is the continuous recording.
 
 ## Opening capture checklist
 
@@ -28,18 +24,18 @@ Capture prerequisites:
 - Prepare the recipient wallet in a second browser profile and copy its address before recording.
 - Keep a terminal beside or below the browser with commands large enough to read.
 - Confirm the web app is using `http://localhost:4100`, not its isolated frontend demo transport.
-- Trigger a transfer while Validator 4 is stopped so continued finality is explicit rather than inferred from a status clock.
+- Trigger a transfer while Validator 4 is stopped and show the new finalized block.
 - End on all four validators aligned; do not cut away during syncing.
 
 ## Guided three-minute walkthrough
 
-### 0:00-0:30 — prove the product exists
+### 0:00-0:30: Prove the product exists
 
 1. Run `docker compose up --build -d` and open `http://localhost:8080`.
 2. Point out the four-validator rail: online state, phase, finalized height, block hash, state root, and lag.
 3. Create the sender wallet, download the PKCS#8 JSON backup, and explain in one sentence that the private key stays in browser memory and transactions still target addresses.
 
-### 0:30-1:15 — earn and transfer
+### 0:30-1:15: Earn and transfer
 
 1. Publish an optional display name, noting that it is cosmetic and non-unique.
 2. Solve the active arithmetic challenge and submit the claim.
@@ -47,7 +43,7 @@ Capture prerequisites:
 4. Show the wallet balance, circulating supply, leaderboard, and ownership table/map update.
 5. Send KCoin to the recipient wallet prepared in another browser profile and open the finalized transfer.
 
-### 1:15-2:05 — demonstrate quorum and recovery
+### 1:15-2:05: Demonstrate quorum and recovery
 
 Stop one validator:
 
@@ -65,7 +61,7 @@ docker compose start validator-4
 
 Show Validator 4 remain non-voting while it requests bounded finalized ranges and verifies certificates, parent links, transactions, and roots. Finish only when it is current and the rail's height, canonical finalized hash, and state root match.
 
-### 2:05-3:00 — connect the demo to engineering evidence
+### 2:05-3:00: Show the implementation
 
 1. Open [`crates/kcoin-consensus/src/engine.rs`](../crates/kcoin-consensus/src/engine.rs) and point to the event/effect boundary: consensus requests persistence before broadcast.
 2. Open [`crates/kcoin-node/src/storage.rs`](../crates/kcoin-node/src/storage.rs) and show exact signing bytes, signature, signed message, and safety state committed together.

@@ -68,7 +68,7 @@ export function usePaginatedResource<T>(
         if (!controller.signal.aborted && generation.current === currentGeneration) setLoading(false)
       })
     return () => controller.abort()
-  // Reset dependencies intentionally belong to the caller; callbacks stay current through refs.
+  // The caller owns reset dependencies; refs keep callbacks current.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...resetDependencies, attempt])
 

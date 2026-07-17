@@ -58,8 +58,8 @@ function string(value: string): Uint8Array {
 }
 
 /**
- * The protocol boundary for the browser. It mirrors the v1 Rust Borsh layout and
- * is intentionally isolated so a generated WASM adapter can replace it later.
+ * The protocol boundary for the browser. It mirrors the v1 Rust Borsh layout
+ * and can be replaced by a generated WASM adapter later.
  */
 export function canonicalTransactionBytes(transaction: Omit<TransactionSubmission, 'signature'>): Uint8Array {
   let action: Uint8Array

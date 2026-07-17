@@ -17,13 +17,13 @@ Consensus signing safety is a separate application-level write-ahead boundary. B
 ## Alternatives considered
 
 - A key-value database reduced schema work but made explorer projections and deterministic reconstruction less explicit.
-- Treating projection tables as authoritative made reads simple but weakened the deterministic-reconstruction story.
+- Treating projection tables as authoritative made reads simple but made deterministic reconstruction harder to verify.
 - Multiple writers added concurrency without improving correctness or query capability and made partial-state bugs harder to exclude.
 
-## Engineering consequences
+## Result
 
 This boundary provides persistent block storage, atomic finalization, independent node databases, and deterministic ledger reconstruction.
 
-## Deliberate exclusions
+## Not included
 
 Snapshots, pruning, migrations across released public networks, remote replicas, and production backup orchestration are outside v1. Unit tests cover fail-closed signer slots and lock restoration; a process-kill fault-injection matrix remains release work.

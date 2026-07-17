@@ -40,6 +40,6 @@ describe('commit certificate disclosure', () => {
   it('keeps older API responses understandable without inventing raw signatures', () => {
     render(<CommitCertificatePanel block={{ ...block, certificate: undefined }} />)
     expect(screen.getByText('Signers reported by node')).toBeInTheDocument()
-    expect(screen.getByText(/does not include the signature bytes/i)).toBeInTheDocument()
+    expect(screen.getByText(/signature bytes are unavailable/i)).toBeInTheDocument()
   })
 })

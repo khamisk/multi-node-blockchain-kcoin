@@ -251,7 +251,7 @@ function EarnWorkspace({ wallet }: { wallet: WalletSession }) {
       ) : challengeResource.data ? (
         <section className="earn-challenge">
           <header className="earn-challenge__header">
-            <div><h2>Current challenge</h2><p>Solve the problem. The first correct claim confirmed by the network receives the reward.</p></div>
+            <div><h2>Current challenge</h2><p>The first correct answer finalized by the network wins.</p></div>
             <div className="earn-reward">
               <span>Reward</span>
               <strong>{formatKcoin(challengeResource.data.reward_atoms)} KC</strong>
@@ -287,7 +287,7 @@ function EarnWorkspace({ wallet }: { wallet: WalletSession }) {
             {answerError && <p className="earn-field-error" id="earn-answer-error" role="alert">{answerError}</p>}
           </form>
         </section>
-      ) : <EmptyState title="No challenge available" detail="A new reward challenge has not been published yet." />}
+      ) : <EmptyState title="No challenge available" detail="Waiting for the next challenge." />}
 
       {claim.error && (
         <div className="earn-feedback earn-feedback--error" role="alert">

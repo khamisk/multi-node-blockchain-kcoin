@@ -105,7 +105,7 @@ export function OverviewPage() {
               </tbody>
             </table>
           </div>
-        ) : <EmptyState title="No blocks yet" detail="Finalized blocks will appear here." />}
+        ) : <EmptyState title="No blocks yet" />}
       </section>
     </>
   )

@@ -83,7 +83,7 @@ function TransactionList() {
               {resource.error && <span role="alert">{resource.error.message}</span>}
               {resource.hasMore && (
                 <button className="button button--secondary" type="button" onClick={resource.loadMore} disabled={resource.loadingMore}>
-                  {resource.loadingMore ? 'Loading…' : 'Load older transactions'}
+                  {resource.loadingMore ? 'Loading...' : 'Load older transactions'}
                 </button>
               )}
             </div>
@@ -118,7 +118,7 @@ function TransactionDetail({ id }: { id: string }) {
               <DefinitionList rows={[
                 { label: 'Transaction ID', value: <CopyValue value={transaction.id} compact /> },
                 { label: 'Type', value: transactionLabel(transaction) },
-                { label: 'Amount', value: transaction.kind === 'set_display_name' ? '—' : `${formatKcoin(transaction.amount_atoms)} KCoin` },
+                { label: 'Amount', value: transaction.kind === 'set_display_name' ? 'N/A' : `${formatKcoin(transaction.amount_atoms)} KCoin` },
                 ...(transaction.kind === 'claim_reward'
                   ? [
                       { label: 'Source', value: 'New KCoin issuance' },
@@ -126,7 +126,7 @@ function TransactionDetail({ id }: { id: string }) {
                     ]
                   : [
                       { label: 'Sender', value: <AddressLink address={transaction.sender} name={transaction.display_name} /> },
-                      { label: 'Recipient', value: transaction.recipient ? <AddressLink address={transaction.recipient} /> : '—' },
+                      { label: 'Recipient', value: transaction.recipient ? <AddressLink address={transaction.recipient} /> : 'N/A' },
                     ]),
                 { label: 'Wallet nonce', value: transaction.nonce },
               ]} />
@@ -138,7 +138,7 @@ function TransactionDetail({ id }: { id: string }) {
                     ? <Link className="inline-link" to={`/blocks/${transaction.block_height}`}>Block {formatInteger(transaction.block_height)}</Link>
                     : transaction.status === 'pending' ? 'Waiting for a block' : 'Not included',
                 },
-                { label: 'Block hash', value: transaction.status === 'finalized' && transaction.block_hash ? <CopyValue value={transaction.block_hash} compact /> : '—' },
+                { label: 'Block hash', value: transaction.status === 'finalized' && transaction.block_hash ? <CopyValue value={transaction.block_hash} compact /> : 'N/A' },
                 { label: 'Time', value: new Date(transaction.timestamp).toLocaleString() },
                 { label: 'Confirmation', value: transaction.status === 'finalized' ? '3 of 4 validator signatures' : transaction.status === 'pending' ? 'Waiting for 3 of 4 validators' : 'Rejected' },
                 ...(transaction.status === 'rejected'
@@ -160,7 +160,7 @@ export function TransactionFinalityPanel({ transaction }: { transaction: Explore
       <div className="integrity-note">
         <div>
           <strong>Finalized</strong>
-          <p>Confirmed by 3 of 4 validators and recorded in a block.</p>
+          <p>Recorded in a block signed by 3 of 4 validators.</p>
         </div>
       </div>
     )
@@ -171,7 +171,7 @@ export function TransactionFinalityPanel({ transaction }: { transaction: Explore
       <div className="integrity-note integrity-note--pending">
         <div>
           <strong>Pending</strong>
-          <p>Submitted. Waiting for 3 of 4 validators to include it in a block.</p>
+          <p>Waiting for 3 of 4 validator signatures.</p>
         </div>
       </div>
     )
@@ -181,7 +181,7 @@ export function TransactionFinalityPanel({ transaction }: { transaction: Explore
     <div className="integrity-note integrity-note--rejected">
       <div>
         <strong>Failed</strong>
-        <p><code>{transaction.rejection_code ?? 'REJECTED'}</code> — not recorded. No balance changed.</p>
+        <p><code>{transaction.rejection_code ?? 'REJECTED'}</code>. Not recorded. No balance changed.</p>
       </div>
     </div>
   )

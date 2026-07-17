@@ -20,7 +20,7 @@ export function OwnershipMap({ entries, circulatingSupplyAtoms }: { entries: Lea
     <div className="ownership-map">
       <svg viewBox={`0 0 ${OWNERSHIP_MAP_WIDTH} ${OWNERSHIP_MAP_HEIGHT}`} role="img" aria-labelledby="ownership-map-title ownership-map-description">
         <title id="ownership-map-title">KCoin ownership map</title>
-        <desc id="ownership-map-description">The top 30 wallets are shown individually, with all remaining holders grouped in one labelled circle. Every circle area is exactly proportional to its finalized KCoin balance.</desc>
+        <desc id="ownership-map-description">Top 30 wallets plus one group for remaining holders. Circle area represents finalized balance.</desc>
         {packed.map((entry, index) => (
           <g
             key={entry.key}

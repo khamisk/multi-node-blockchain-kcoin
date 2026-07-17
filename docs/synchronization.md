@@ -57,6 +57,6 @@ docker compose start validator-4
 
 The React validator rail reads signed status observations from the observer and shows offline, syncing, and current states. Recovery is complete only when height, canonical finalized hash, and state root match.
 
-## Deliberate limits
+## Not included
 
-There is no public peer discovery, NAT hardening, snapshot sync, pruning, peer reputation, dynamic validator membership, or Byzantine internet-deployment claim. The v1 objective is a small network whose safety and recovery path can be read, tested, and demonstrated end to end.
+There is no public peer discovery, NAT hardening, snapshot sync, pruning, peer reputation, or dynamic validator membership. V1 targets a fixed local network, not a public deployment.

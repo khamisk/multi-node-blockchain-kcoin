@@ -8,15 +8,15 @@ The visual system uses off-white surfaces, ink typography, thin rules, square co
 
 ## Alternatives considered
 
-- Node-managed keys would simplify the demo but invalidate the wallet-security story.
+- Node-managed keys would simplify the demo but move private-key custody into the node.
 - Persistent browser storage would be convenient but imply a custody product v1 does not provide.
 - A separate landing page would place introductory content before the working network.
 - Decorative dashboards made the validator state less legible than a restrained engineering instrument.
 
-## Engineering consequences
+## Result
 
 This makes the end-to-end behavior visible: locally generated signatures cause real ledger changes, explorer activity, supply metrics, ownership changes, and validator recovery feedback.
 
-## Deliberate exclusions
+## Not included
 
 Seed phrases, extensions, hardware wallets, cloud recovery, production custody, exchange data, and mobile apps are outside v1.

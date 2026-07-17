@@ -13,6 +13,6 @@ Rust remains authoritative. Cross-language vectors make drift fail in both Rust 
 - Runtime WASM reuse removes the handwritten adapter but adds generated glue and another build tool to the primary quickstart. For three bounded transaction variants, reciprocal golden tests provide a clearer tradeoff.
 - Signing REST JSON was rejected because key order, numeric representation, and JavaScript number limits would make the consensus boundary ambiguous.
 
-## Exclusions
+## Not included
 
 Custom cryptographic primitives, JSON signing, floating-point balances, smart contracts, fees, arbitrary token types, and claims that the current browser bundle executes Rust/WASM.

@@ -34,7 +34,7 @@ function BlockList() {
       ) : resource.error && !resource.items.length ? (
         <ErrorState error={resource.error} retry={resource.reload} />
       ) : !resource.items.length ? (
-        <EmptyState title="No finalized blocks" detail="Finalized blocks will appear here." />
+        <EmptyState title="No finalized blocks" />
       ) : (
         <>
           <div className="table-scroll" role="region" aria-label="Finalized blocks" tabIndex={0}>
@@ -81,7 +81,7 @@ function BlockList() {
               {resource.error && <span role="alert">{resource.error.message}</span>}
               {resource.hasMore && (
                 <button className="button button--secondary" type="button" onClick={resource.loadMore} disabled={resource.loadingMore}>
-                  {resource.loadingMore ? 'Loading…' : 'Load older blocks'}
+                  {resource.loadingMore ? 'Loading...' : 'Load older blocks'}
                 </button>
               )}
             </div>
@@ -103,7 +103,7 @@ function BlockDetail({ id }: { id: string }) {
       <Link className="back-link" to="/blocks"><ArrowLeft size={14} />Blocks</Link>
       <PageHeading
         title={block ? `Block ${formatInteger(block.height)}` : 'Block'}
-        action={block && <span className="page-meta">Finalized · {signatureCount}/4 signatures</span>}
+        action={block && <span className="page-meta">Finalized, {signatureCount}/4 signatures</span>}
       />
       {resource.loading && !block ? (
         <LoadingRows label="Loading block" />
@@ -126,9 +126,9 @@ function BlockDetail({ id }: { id: string }) {
                 { label: 'Transactions', value: block.transaction_count },
                 { label: 'Transaction root', value: <CopyValue value={block.transaction_root} compact /> },
                 { label: 'State root', value: <CopyValue value={block.state_root} compact /> },
-                { label: 'Header slot', value: `${validatorName(block.header_proposer)} · Round ${block.header_round}` },
+                { label: 'Header slot', value: `${validatorName(block.header_proposer)}, round ${block.header_round}` },
                 { label: 'Commit certificate', value: `${signatureCount} validator signatures` },
-                { label: 'Signers', value: block.signers.map((signer) => signer.replace('validator-', 'V')).join(' · ') },
+                { label: 'Signers', value: block.signers.map((signer) => signer.replace('validator-', 'V')).join(', ') },
               ]} />
             </div>
           </section>
@@ -185,7 +185,7 @@ export function CommitCertificatePanel({ block, demo = false }: { block: Explore
       ) : (
         <div className="certificate-legacy-note">
           <strong>Signers reported by node</strong>
-          <p>This older response does not include the signature bytes. It reports {block.signers.length} signers; refresh against an updated node to inspect each signature.</p>
+          <p>Signature bytes are unavailable in this node response. Update the node and refresh to inspect them.</p>
         </div>
       )}
     </details>

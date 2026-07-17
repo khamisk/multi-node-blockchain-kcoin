@@ -61,7 +61,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   }
 
   const networkPresentation = mode === 'demo'
-    ? { label: 'Demo · browser-only data', state: 'demo' }
+    ? { label: 'Demo data', state: 'demo' }
     : !ready || (networkStatus.loading && !networkStatus.data)
       ? { label: 'Checking network', state: 'checking' }
       : networkStatus.error

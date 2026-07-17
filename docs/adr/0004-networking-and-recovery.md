@@ -16,10 +16,10 @@ The node also retains each outbound sync request's local ID, expected peer, requ
 - Longest-chain synchronization conflicts with immediate BFT finality and introduces unnecessary fork choice.
 - Database copying is fast locally but cannot prove that a recovering node validated history.
 
-## Engineering consequences
+## Result
 
 The approach exposes peer propagation, bounded protocols, independent identities, catch-up, and recovery after downtime as observable system behavior.
 
-## Deliberate exclusions
+## Not included
 
 Public discovery, dynamic membership, NAT traversal hardening, persistent peer reputation, snapshot sync, and adversarial internet deployment are outside v1. A failed or corrupt sync peer is excluded from the immediate retry choice, but KCoin does not implement a production-grade provider-scoring scheduler. The network layer accepts an allowlist, but the local CLI currently leaves it empty; production peer admission is not claimed.

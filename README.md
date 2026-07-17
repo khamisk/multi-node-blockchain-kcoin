@@ -2,31 +2,29 @@
 
 A four-validator blockchain and live explorer built in Rust and React, with browser-signed transactions, 3-of-4 finality, independent persistent ledgers, and verified recovery after node downtime.
 
-**Stack:** Rust · React · Axum · rust-libp2p/QUIC · SQLite · WebCrypto · Docker Compose
+**Stack:** Rust, React, Axum, rust-libp2p/QUIC, SQLite, WebCrypto, Docker Compose
 
-[![Create a wallet, earn and send KCoin, inspect finality, then recover an offline validator](docs/assets/kcoin-demo-highlight.gif)](docs/assets/kcoin-demo.webm)
+![Create a wallet, earn and send KCoin, inspect finality, then recover an offline validator](docs/assets/kcoin-demo-highlight.gif)
 
-The real-network demo follows one continuous workflow:
+The demo shows:
 
 1. Create a browser wallet and save its backup.
 2. Solve an arithmetic challenge to earn KCoin.
 3. Send KCoin to another address.
 4. Open the finalized transaction, block, and commit certificate.
 5. Stop Validator 4 while the other three continue finalizing.
-6. Restart it and watch **Offline → Syncing → Up to date**.
+6. Restart it and watch it move from **Offline** to **Syncing** to **Up to date**.
 
-Watch the [full 1:53 live recording](docs/assets/kcoin-demo.webm). The capture uses four validator containers, one observer, five independent SQLite databases, and the real browser wallet—no mocked chain data.
-
-> KCoin is an experimental portfolio network with no real monetary value. It is not a production cryptocurrency or wallet.
+[Download the full 1:53 recording](https://github.com/khamisk/multi-node-blockchain-kcoin/releases/download/v0.1.0/kcoin-demo.webm). It uses four validator containers, one observer, and five separate SQLite databases. The wallet and chain data are real.
 
 ## What I built
 
-- **Protocol and ledger:** Ed25519-signed transactions, Bech32m addresses, canonical Borsh encoding, domain-separated BLAKE3 hashes, nonce and expiry checks, deterministic execution, state roots, and commit certificates.
-- **Challenge issuance:** A deterministic arithmetic challenge creates supply without a premine. Rewards decrease across issuance bands until the 100,000 KCoin cap.
-- **Consensus:** A deterministic `Proposal → Prevote → Precommit → Finalize` state machine with rotating proposers, locks, valid-round proofs, and three-signature quorum certificates.
-- **Networking and recovery:** libp2p gossip over QUIC, bounded finalized-block requests, non-voting catch-up, and certificate-backed verification for returning nodes.
-- **Persistence:** Independent SQLite databases, atomic block finalization, crash-safe signing records, canonical-history verification, and rebuildable explorer indexes.
-- **Product surface:** A memory-only WebCrypto wallet, Axum REST/SSE API, live block explorer, validator recovery view, and ownership visualization.
+- **Transactions:** Ed25519 signatures, Bech32m addresses, Borsh encoding, BLAKE3 hashes, nonce checks, expiry checks, state roots, and commit certificates.
+- **Issuance:** Solving a deterministic arithmetic challenge creates KCoin. Rewards decrease across five supply bands until the 100,000 KCoin cap.
+- **Consensus:** Four validators move through proposal, prevote, precommit, and finalize states. Three matching signatures finalize a block.
+- **Networking:** libp2p gossip runs over QUIC. Returning nodes download certified blocks and verify them before voting again.
+- **Storage:** Each node has its own SQLite database. Block finalization and signing records are written atomically.
+- **Frontend:** The React app includes a browser wallet, explorer, validator recovery view, and ownership map. It uses an Axum REST/SSE API.
 
 I implemented the protocol rules, consensus state machine, node runtime, storage and synchronization paths, API, wallet integration, explorer, tests, and Docker devnet. Established libraries provide the cryptographic primitives, canonical serialization, networking transport, and SQLite bindings.
 
@@ -52,7 +50,7 @@ docker compose down --volumes
 flowchart LR
     B["Browser wallet + explorer"]
     O["Observer / API<br/>Axum REST + SSE"]
-    V["Four validators<br/>Proposal · Prevote · Precommit"]
+    V["Four validators<br/>Proposal, prevote, precommit"]
     VD[("Independent validator<br/>SQLite databases")]
     OD[("Observer SQLite")]
 
@@ -66,7 +64,7 @@ flowchart LR
 
 The browser generates an Ed25519 key and signs canonical transaction bytes locally; private key material never reaches a node. A rotating proposer places the transaction in a candidate block, and every validator independently checks its signature, nonce, balance, transaction root, and resulting state root.
 
-Validators first prevote, then precommit. Three matching precommits from the fixed four-validator set form a commit certificate. That certified block is final immediately—there is no longest-chain fork choice or later reorganization.
+Validators first prevote, then precommit. Three matching precommits from the fixed four-validator set form a commit certificate. That block is final immediately. There is no longest-chain fork choice or later reorganization.
 
 [![Block detail showing the three-validator commit certificate and signature bytes](docs/assets/demo-04-explorer-certificate.png)](docs/assets/demo-04-explorer-certificate.png)
 
@@ -78,7 +76,7 @@ The safety model assumes no more than one Byzantine validator. One unavailable v
 docker compose stop validator-4
 ```
 
-Earn or send KCoin while it is offline. Validators 1–3 still produce a three-signature certificate, so the explorer height advances. Then restart it:
+Earn or send KCoin while it is offline. Validators 1, 2, and 3 still produce a three-signature certificate, so the explorer height advances. Then restart it:
 
 ```bash
 docker compose start validator-4
@@ -101,7 +99,7 @@ See the [offline](docs/assets/demo-06-validator-offline.png) and [fully recovere
 | Canonical history reconstructs ledger state and explorer projections | [Protocol replay](crates/kcoin-protocol/src/ledger.rs) and [storage tests](crates/kcoin-node/src/storage.rs) |
 | Rust and frontend code agree on addresses, signing bytes, signatures, and transaction IDs | [Rust vectors](crates/kcoin-protocol/tests/golden_vectors.rs) and [frontend vectors](web/src/test/wallet-vectors.test.ts) |
 
-The [threat and correctness matrix](docs/threat-model.md) links each claim to a test and marks partial evidence explicitly.
+The [threat and correctness matrix](docs/threat-model.md) lists the test coverage and remaining gaps.
 
 ```bash
 cargo test --locked --workspace --all-targets
@@ -127,7 +125,7 @@ Start with the zero-prerequisite [blockchain guide (PDF)](docs/multi-node-blockc
 
 ## Scope
 
-KCoin deliberately excludes smart contracts, mining, staking, fees, dynamic validator membership, slashing, governance, public peer discovery, snapshot sync, production custody, and public-cloud hardening.
+Not included: smart contracts, mining, staking, fees, dynamic validator membership, slashing, governance, public peer discovery, snapshot sync, production custody, and public-cloud hardening.
 
 The included benchmark command is a sequential latency smoke harness, not a network-capacity benchmark. No throughput claim is published without reproducible saturation testing and committed raw results.
 

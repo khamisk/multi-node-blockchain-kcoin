@@ -1,6 +1,6 @@
 # Persistence, verification, and reconstruction
 
-Each KCoin process owns an independent SQLite database. The node's ledger actor is the only component that mutates ledger state or writes finalized history, which makes the boundary between deterministic execution and durable I/O explicit.
+Each KCoin process owns an independent SQLite database. The node's ledger actor is the only component that mutates ledger state or writes finalized history. This keeps deterministic execution separate from durable I/O.
 
 ## What is authoritative
 

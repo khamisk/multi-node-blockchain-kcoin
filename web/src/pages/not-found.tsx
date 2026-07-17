@@ -6,7 +6,6 @@ export function NotFoundPage() {
     <div className="not-found">
       <span>404</span>
       <h1>Page not found</h1>
-      <p>The requested explorer page does not exist.</p>
       <Link className="button button--secondary" to="/"><ArrowLeft size={15} />Overview</Link>
     </div>
   )

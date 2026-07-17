@@ -29,7 +29,7 @@ export function useResource<T>(loader: (signal: AbortSignal) => Promise<T>, depe
         if (!controller.signal.aborted) setLoading(false)
       })
     return () => controller.abort()
-  // Dependencies intentionally belong to the caller; loader is kept current through a ref.
+  // The caller owns dependencies; the ref keeps the loader current.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...dependencies, attempt])
 

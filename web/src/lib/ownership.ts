@@ -20,8 +20,8 @@ export interface PackedOwnershipEntry extends OwnershipVisualEntry {
 }
 
 /**
- * The visual always covers the top 30 API entries and explicitly represents
- * every remaining atom as one "Other holders" aggregate.
+ * The visual covers the top 30 API entries and groups every remaining atom
+ * into one "Other holders" entry.
  */
 export function buildOwnershipVisualEntries(
   entries: LeaderboardEntry[],
@@ -54,8 +54,7 @@ export function buildOwnershipVisualEntries(
 
 /**
  * A single common scale makes r² proportional to balance for every circle.
- * There is deliberately no per-circle minimum radius because that would make
- * small holders look richer than they are.
+ * A per-circle minimum radius would make small holders look richer than they are.
  */
 export function packOwnershipEntries(entries: OwnershipVisualEntry[]): PackedOwnershipEntry[] {
   const positive = entries.filter((entry) => BigInt(entry.balance_atoms) > 0n)

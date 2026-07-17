@@ -1,6 +1,6 @@
 # Benchmark methodology
 
-No public performance result is warranted until it is reproducible from a committed release build. This repository currently contains a useful latency smoke harness, not a saturation benchmark and not a published result set.
+This repository includes a sequential latency smoke test. It is not a saturation benchmark, so no throughput result is published.
 
 ## Current harness
 
@@ -29,9 +29,5 @@ That output is a **concurrency-one observation**. It does not discover saturatio
 For the current CLI, a sample starts immediately before HTTP submission and stops when `GET /api/v1/transactions/{id}` reports finalized on the measured API node. Against the default Docker topology that API belongs to the observer, whose transaction row is created only after it has received, verified, and committed the certified block.
 
 For a publishable benchmark, confirmation must still be cross-checked against observer durability: the observer has verified a three-signature certificate and its SQLite commit has completed. Mempool acceptance, proposal receipt, prevotes, and a validator-only response are not confirmations.
-
-## Current limits
-
-The harness is intentionally a smoke check, not a network-capacity result. It runs one request at a time, does not search for saturation, and does not collect CPU, memory, network, or database-growth telemetry. The repository therefore makes no numeric throughput claim.
 
 Any future published result must include its raw samples, exact commit, machine and Docker environment, workload settings, repeated runs, and every offered-load point through saturation. Throughput must mean transactions durably finalized by the observer, not requests merely accepted by HTTP.

@@ -142,7 +142,7 @@ export function WalletPage() {
         </section>
       ) : !backupConfirmed ? (
         <section className="backup-gate">
-          <div className="backup-gate__heading"><h2>Back up your wallet</h2><p>This file controls your KCoin. Keep it private. To reopen this wallet later, import the backup.</p></div>
+          <div className="backup-gate__heading"><h2>Back up your wallet</h2><p>Download this file and keep it private. You need it to import the wallet again.</p></div>
           <div className="backup-address"><span>Wallet address</span><CopyValue value={wallet.address} /></div>
           <div className="button-row">
             <button
@@ -303,7 +303,7 @@ function WalletWorkspace({ wallet }: { wallet: WalletSession }) {
           <div><dt>Backup</dt><dd>Confirmed</dd></div>
           <div><dt>Next nonce</dt><dd className="mono">{account?.nonce ?? '--'}</dd></div>
         </dl>
-        <button className="button button--secondary" type="button" onClick={lock} title="Removes this wallet from the tab. Import the backup to reopen it.">Close wallet</button>
+        <button className="button button--secondary" type="button" onClick={lock} title="Clears this wallet from the tab. Import the backup to reopen it.">Close wallet</button>
       </section>
 
       {readinessMessage && !(statusResource.error && !statusResource.data) && (
@@ -440,7 +440,7 @@ function ActionFeedback({ action, kind }: { action: ActionState; kind: ActionKin
     <div className={`action-feedback action-feedback--${action.result.status}`} role="status" aria-live="polite">
       <div>
         <strong>{kind === 'transfer' ? `Transfer ${action.result.status}` : `Display name ${action.result.status}`}</strong>
-        <p>{finalized ? 'Included in finalized history.' : 'Waiting for three validator votes.'}</p>
+        <p>{finalized ? 'Included in a finalized block.' : 'Waiting for 3 of 4 validators.'}</p>
       </div>
       {finalized && <Link to={`/transactions/${action.result.id}`}>View transaction</Link>}
     </div>

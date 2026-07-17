@@ -47,7 +47,7 @@ export function OwnershipPage() {
           </section>
 
           {visualEntries.length === 0 ? (
-            <EmptyState title="No KCoin has been issued" detail="Claim the first reward to populate the ownership view." />
+            <EmptyState title="No KCoin has been issued" detail="Claim a reward to add the first holder." />
           ) : <div className="ownership-workspace detail-section">
             <section aria-labelledby="ownership-map-heading">
               <div className="section-heading">
@@ -78,11 +78,11 @@ export function OwnershipPage() {
                     ))}
                     {otherHolders && (
                       <tr className="aggregate-row">
-                        <td className="rank-cell">&mdash;</td>
+                        <td className="rank-cell">N/A</td>
                         <td><strong>Other holders</strong></td>
                         <td className="numeric amount-cell">{formatKcoin(otherHolders.balance_atoms)} <small>KC</small></td>
                         <td className="numeric">{percentFromBps(otherHolders.share_bps)}</td>
-                        <td className="numeric">&mdash;</td>
+                        <td className="numeric">N/A</td>
                       </tr>
                     )}
                   </tbody>

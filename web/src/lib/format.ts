@@ -23,9 +23,9 @@ export function parseKcoin(input: string): string {
 }
 
 export function shortHash(value: string, leading = 8, trailing = 6): string {
-  if (!value) return '—'
+  if (!value) return 'N/A'
   if (value.length <= leading + trailing + 1) return value
-  return `${value.slice(0, leading)}…${value.slice(-trailing)}`
+  return `${value.slice(0, leading)}...${value.slice(-trailing)}`
 }
 
 export function timeAgo(timestamp: string): string {

@@ -33,9 +33,9 @@ Wallets may have optional public display names shown on the explorer, leaderboar
 
 The actions are:
 
-- `Transfer { recipient, amount_atoms }` — moves a positive integer number of atoms;
-- `ClaimReward { challenge_id, answer }` — claims the single active arithmetic challenge; or
-- `SetDisplayName { display_name }` — updates cosmetic public metadata without moving value.
+- `Transfer { recipient, amount_atoms }`: Moves a positive integer number of atoms.
+- `ClaimReward { challenge_id, answer }`: Claims the single active arithmetic challenge.
+- `SetDisplayName { display_name }`: Updates cosmetic public metadata without moving value.
 
 `SignedTransaction` adds a 64-byte Ed25519 signature. The signature covers a versioned prefix plus canonical unsigned bytes; the transaction ID hashes the canonical signed representation. Validation checks shape, chain, expiry, signature, duplicate ID, exact nonce, action semantics, balance, and checked arithmetic before mutating state.
 
@@ -63,7 +63,7 @@ One KCoin is `1,000,000` atoms. Supply starts at zero, there are no fees or prem
 
 The final reward is reduced if necessary so issuance lands exactly on the hard cap.
 
-There is one active, deterministic one-digit addition, subtraction, or multiplication challenge. It persists until the first valid claim executes in a finalized block. Challenge content is a pure function of its monotonically increasing ID; after a winning claim, the ID increments and every node derives the same next challenge without randomness or clocks. Proposer ordering and anti-bot fairness are deliberate v1 exclusions.
+There is one active, deterministic one-digit addition, subtraction, or multiplication challenge. It persists until the first valid claim executes in a finalized block. Challenge content is a pure function of its monotonically increasing ID; after a winning claim, the ID increments and every node derives the same next challenge without randomness or clocks. Proposer ordering and anti-bot fairness are not included in v1.
 
 ## Blocks
 
@@ -86,7 +86,7 @@ A `CommitCertificate` stores protocol version, chain ID, height, finality round,
 
 Certificate validation rejects the wrong chain, height, block hash, an impossible round earlier than the block's construction round, invalid declared rotation metadata, malformed or duplicate signers, unknown validator keys, invalid Ed25519 signatures, non-canonical signer order, and fewer than three signatures. The consensus state machine separately verifies that each live proposal envelope was signed by the expected proposer for its current round. Certificates remain separate from block bytes, avoiding a circular block-hash dependency and allowing more than one valid proof for the same immutable block.
 
-The REST explorer labels `proposer` and `round` as finality metadata derived from the certificate and fixed rotation. It returns `header_proposer` and `header_round` for the immutable declared header slot, explicitly avoiding an unsupported provenance claim.
+The REST explorer labels `proposer` and `round` as finality metadata derived from the certificate and fixed rotation. It returns `header_proposer` and `header_round` for the immutable declared header slot. It does not claim proof of which proposal first introduced the block bytes.
 
 ## Deterministic replay
 
